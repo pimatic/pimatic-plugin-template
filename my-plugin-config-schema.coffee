@@ -1,10 +1,7 @@
 # #my-plugin configuration options
-
-# Declare your config option for your plugin here. 
-
-# Defines a `node-convict` config-schema and exports it.
-module.exports =
-  option1:
-    doc: "Some option"
-    format: String
-    default: "foo"
+# http://json-schema.org/documentation.html
+module.exports = {
+  title: "my-plugin config"
+  type: "object"
+  properties: {}
+}

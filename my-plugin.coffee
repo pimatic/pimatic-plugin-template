@@ -17,8 +17,8 @@ module.exports = (env) ->
   # Require [convict](https://github.com/mozilla/node-convict) for config validation.
   convict = env.require "convict"
 
-  # Require the [Q](https://github.com/kriskowal/q) promise library
-  Q = env.require 'q'
+  # Require the [bluebird](https://github.com/petkaantonov/bluebird) promise library
+  Promise = env.require 'bluebird'
 
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
@@ -42,38 +42,15 @@ module.exports = (env) ->
     #     section of the config.json file 
     #     
     # 
-    init: (app, @framework, config) =>
-      # Require your config schema
-      @conf = convict require("./my-plugin-config-schema")
-      # and validate the given config.
-      @conf.load config
-      @conf.validate()
-      # You can use `@conf.get "myOption"` to get a config option.
+    init: (app, @framework, @config) =>
+      
+      deviceConfigDef = require("./device-config-schema")
+ 
+      @framework.deviceManager.registerDeviceClass("MySwitch", {
+        configDef: deviceConfigDef.MySwitch, 
+        createCallback: (config) => new MySwitch(config)
+      })
 
-    # ####createDevice()
-    # The `createDevice` function is called by the framework for every device in the `devices`
-    # section of the config.json file.
-    # 
-    # You should create your device here, if the class of the given deviceConfig matches on of 
-    # yours.
-    # 
-    # #####params:
-    #  * `deviceConfig` the properties the user specified in the `devices` section of the 
-    #    config.json file
-    # 
-    createDevice: (deviceConfig) =>
-      # if the class option of the given config is...
-      switch deviceConfig.class
-        # ...matches your switch class
-        when "MySwitch" 
-          # then create a instance of your device and register it
-          @framework.registerDevice(new MySwitch deviceConfig)
-          # and return true.
-          return true
-        # ... not matching your classes
-        else
-          # then return false.
-          return false
 
   # ###MySwitch class
   # An example class for a switch device
@@ -81,15 +58,9 @@ module.exports = (env) ->
 
     # ####constructor()
     # Your constructor function must assign a name and id to the device.
-    constructor: (deviceConfig) ->
-      # Require your actuator config schema
-      @conf = convict require("./my-device-config-schema")
-      # and validate the given device config.
-      @conf.load deviceConfig
-      @conf.validate()
-      # Then assign the given name and id to the object.
-      @name = @conf.get "name"
-      @id = @conf.get "id"
+    constructor: (@config) ->
+      @name = @config.name
+      @id = @config.id
       super()
 
     # ####changeStateTo(state)
@@ -97,27 +68,27 @@ module.exports = (env) ->
     # framework.
     changeStateTo: (state) ->
       # If state is aleady set, just return a empty promise
-      if @_state is state then return Q()
-      # else return a promise
-      else return Q.fcall =>
-        # that does the magic stuff
-        yourChangeStateImplementation()
+      if @_state is state then return Promise.resolve()
+      # else run the action and 
+      return yourChangeStateImplementation().then( =>
         # and calls `PowerSwitch::_setState` so that `_state` is set and 
         # a event is emitted.
-        @_setState state
+        @_setState(state)
+      )
+
 
 
     # ####getState()
     # Should return a promise with the state of the switch.
     getState: () ->
       # If the state is cached then return it
-      return if @_state? then Q @_state
-      # else 
-      else Q.fcall => 
-        # get the state from somwhere
-        @_state = yourGetStateImplementation()
+      return if @_state? then Promise.resolve(@_state)
+      # else et the state from somwhere
+      return yourGetStateImplementation().then( (state) =>
+        @_state = state
         # and return it.
         return @_state
+      )
 
   # ###Finally
   # Create a instance of my plugin
