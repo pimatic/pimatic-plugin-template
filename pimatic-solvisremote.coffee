@@ -120,7 +120,7 @@ module.exports = (env) ->
 
     # poll data
     _scheduleUpdate: () ->
-      if typeof @intervalObject isnt 'undefined'
+      if @intervalObject?
         clearInterval(@intervalObject)
 
       # update
@@ -134,6 +134,7 @@ module.exports = (env) ->
       @_requestData()
 
     destroy: () ->
+      clearInterval(@intervalObject) if @intervalObject?
       super()
 
     _fetchData:  (url, callback) ->
