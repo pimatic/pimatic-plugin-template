@@ -3,7 +3,7 @@ pimatic-solvisremote
 
 SolvisRemote plugin for <a href="https://pimatic.org">Pimatic</a> to get values from a SolvisMax solar heating system
 
-### Plugin Configuration
+# Plugin Configuration
 Edit your config.json and include the following lines in the plugins section.
 
     {
@@ -17,7 +17,7 @@ It is possible to enable debugging
       "debug": true
     }
 
-### Device Configuration
+# Device Configuration
 
 Debices must be added manually to the device section of your pimatic config.
 
