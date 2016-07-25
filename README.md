@@ -33,7 +33,8 @@ Debices must be added manually to the device section of your pimatic config.
       "user": "solvis",
       "pass": "solvis",
       "interval": 10,
-      "xLink": "http://192.168.178.61/schema.html"
+      "xLink": "http://192.168.178.61/schema.html",
+      ...
     }
 
 ## Sensor/In/Out/State configuration
@@ -42,13 +43,13 @@ To get values with pimatic like temperature from "S1", add following lines after
 
     "s1": {
       "label": "Warmwasserpuffer"
-    }
+    },
 
 To get the state of the solar pump add these lines:
 
     "a1_state": {
       "label": "Solaranlage"
-    }
+    },
 
 Only added values are displayed. So it is possible to build your own SolvisMax environment. All possible values are listet in device-config-schema.
 
