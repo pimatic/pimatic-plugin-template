@@ -45,7 +45,7 @@ To get values with pimatic like temperature from "S1", add following lines after
 Only added values are displayed. So it is possible to build your own SolvisMax environment. All possible values are listet in device-config-schema.
 
 The "label"-attribute let your values be more readable. Best way to collect the data for your environment is to open SolvisRemote in a browser and open the
-system scheme in the mobile view. Have a look at the sourcecode of the "schemam.html". Scroll down to the <body>-tag and you find the information.
+system scheme in the mobile view. Have a look at the sourcecode of the "schemam.html". Scroll down to the BODY-tag and you'll find the needed information.
 
 
 ## Full example
