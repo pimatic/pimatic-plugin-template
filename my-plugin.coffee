@@ -1,7 +1,7 @@
 # #Plugin template
 
 # This is an plugin template and mini tutorial for creating pimatic plugins. It will explain the 
-# basics of how the plugin system works and how a plugin should look like.
+# basics of how the plugin system works and what a plugin should look like.
 
 # ##The plugin code
 
@@ -20,7 +20,7 @@ module.exports = (env) ->
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
 
-  # Include you own depencies with nodes global require function:
+  # Include your own depencies with nodes global require function:
   #  
   #     someThing = require 'someThing'
   #  
